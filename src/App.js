@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import logoImage from './assets/logo.png'
+import logoImage from './assets/logo.png';
+import Confetti from 'react-confetti';
 
 function Exercise({ exercise, onDelete, isActive }) {
   return (
@@ -8,6 +9,19 @@ function Exercise({ exercise, onDelete, isActive }) {
       {exercise.name} - {exercise.duration} seconds
       <button onClick={onDelete}>Delete</button>
     </li>
+  );
+}
+
+function CongratulationsPopup({ onClose }) {
+  return (
+    <div className="popup-overlay">
+      <div className="popup-content">
+        <h2>Congratulations!</h2>
+        <p>You completed your workout!</p>
+        <button onClick={onClose}>Close</button>
+      </div>
+      <Confetti />
+    </div>
   );
 }
 
@@ -19,6 +33,7 @@ function App() {
   const [isWorkoutRunning, setIsWorkoutRunning] = useState(false);
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
   const [remainingTime, setRemainingTime] = useState(0);
+  const [showCongratulations, setShowCongratulations] = useState(false);
 
   useEffect(() => {
     let interval;
@@ -35,7 +50,7 @@ function App() {
               return exercises[nextIndex].duration;
             } else {
               stopWorkout();
-              alert('Congratulations! You completed your workout!');
+              setShowCongratulations(true);
               return 0;
             }
           }
@@ -47,7 +62,7 @@ function App() {
 
   const addExercise = () => {
     if (exerciseName && exerciseDuration) {
-      setExercises([...exercises, { name: exerciseName, duration: exerciseDuration }]);
+      setExercises([...exercises, { name: exerciseName, duration: parseInt(exerciseDuration) }]);
       setExerciseName('');
       setExerciseDuration(60);
     }
@@ -86,9 +101,14 @@ function App() {
     return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
+  const closeCongratulations = () => {
+    setShowCongratulations(false);
+    setIsEditing(true);
+  };
+
   return (
     <div className="App">
-      <img src={logoImage} alt="Logo" />
+      <img src={logoImage} alt="Logo" className="logo" />
       {isEditing && (
         <div>
           <input
@@ -100,7 +120,7 @@ function App() {
           <input
             type="number"
             value={exerciseDuration}
-            onChange={(e) => setExerciseDuration(parseInt(e.target.value))}
+            onChange={(e) => setExerciseDuration(e.target.value)}
             min="10"
             max="600"
           />
@@ -127,6 +147,7 @@ function App() {
         <button onClick={saveExercises}>Save</button>
       )}
       {isWorkoutRunning && <div className="timer">{formatTime(remainingTime)}</div>}
+      {showCongratulations && <CongratulationsPopup onClose={closeCongratulations} />}
     </div>
   );
 }

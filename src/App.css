@@ -5,8 +5,10 @@
   padding: 20px;
 }
 
-h1 {
-  text-align: center;
+.logo {
+  display: block;
+  margin: 0 auto 20px;
+  max-width: 200px;
 }
 
 ul {
@@ -38,6 +40,21 @@ input, button {
   margin: 20px 0;
 }
 
-img{
-  width: 316px;
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
 }
