@@ -1,8 +1,15 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}
+
 .App {
-  font-family: Poppins, sans-serif;
-  max-width: 800px;
+  max-width: 600px;
   margin: 0 auto;
   padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
@@ -11,33 +18,83 @@
   max-width: 200px;
 }
 
-ul {
+.input-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.exercise-input, .duration-input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.add-btn, .save-btn, .start-btn, .stop-btn, .delete-btn, .close-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-btn {
+  background-color: #4CAF50;
+}
+
+.save-btn {
+  background-color: #2196F3;
+}
+
+.start-btn {
+  background-color: #4CAF50;
+}
+
+.stop-btn, .delete-btn {
+  background-color: #f44336;
+}
+
+.close-btn {
+  background-color: #2196F3;
+}
+
+.add-btn:hover, .save-btn:hover, .start-btn:hover, .stop-btn:hover, .delete-btn:hover, .close-btn:hover {
+  opacity: 0.8;
+}
+
+.exercise-list {
   list-style-type: none;
   padding: 0;
 }
 
-li {
+.exercise-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
   border: 1px solid #ccc;
-  margin-bottom: 5px;
+  border-radius: 5px;
+  margin-bottom: 10px;
 }
 
-li.active {
-  background-color: #ffff99;
+.exercise-item.active {
+  background-color: #fff9c4;
 }
 
-input, button {
-  margin: 5px 0;
-  padding: 5px;
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .timer {
-  font-size: 24px;
+  font-size: 36px;
   text-align: center;
   margin: 20px 0;
+  font-weight: bold;
+  color: #2196F3;
 }
 
 .popup-overlay {
@@ -55,6 +112,11 @@ input, button {
 .popup-content {
   background-color: white;
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 10px;
   text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.popup-content h2 {
+  margin-top: 0;
 }

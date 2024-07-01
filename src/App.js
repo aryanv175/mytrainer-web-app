@@ -5,9 +5,9 @@ import Confetti from 'react-confetti';
 
 function Exercise({ exercise, onDelete, isActive }) {
   return (
-    <li className={isActive ? 'active' : ''}>
-      {exercise.name} - {exercise.duration} seconds
-      <button onClick={onDelete}>Delete</button>
+    <li className={`exercise-item ${isActive ? 'active' : ''}`}>
+      <span>{exercise.name} - {exercise.duration} seconds</span>
+      <button className="delete-btn" onClick={onDelete}>Delete</button>
     </li>
   );
 }
@@ -18,7 +18,7 @@ function CongratulationsPopup({ onClose }) {
       <div className="popup-content">
         <h2>Congratulations!</h2>
         <p>You completed your workout!</p>
-        <button onClick={onClose}>Close</button>
+        <button className="close-btn" onClick={onClose}>Close</button>
       </div>
       <Confetti />
     </div>
@@ -114,12 +114,13 @@ function App() {
     <div className="App">
       <img src={logoImage} alt="Logo" className="logo" />
       {isEditing && (
-        <div>
+        <div className="input-container">
           <input
             type="text"
             value={exerciseName}
             onChange={(e) => setExerciseName(e.target.value)}
             placeholder="Enter Exercise Name"
+            className="exercise-input"
           />
           <input
             type="number"
@@ -127,11 +128,12 @@ function App() {
             onChange={(e) => setExerciseDuration(e.target.value)}
             min="10"
             max="600"
+            className="duration-input"
           />
-          <button onClick={addExercise}>Add Exercise</button>
+          <button className="add-btn" onClick={addExercise}>Add Exercise</button>
         </div>
       )}
-      <ul>
+      <ul className="exercise-list">
         {exercises.map((exercise, index) => (
           <Exercise
             key={index}
@@ -141,15 +143,17 @@ function App() {
           />
         ))}
       </ul>
-      {!isEditing ? (
-        isWorkoutRunning ? (
-          <button onClick={stopWorkout}>Stop Workout</button>
+      <div className="action-buttons">
+        {!isEditing ? (
+          isWorkoutRunning ? (
+            <button className="stop-btn" onClick={stopWorkout}>Stop Workout</button>
+          ) : (
+            <button className="start-btn" onClick={startWorkout}>Start Workout</button>
+          )
         ) : (
-          <button onClick={startWorkout}>Start Workout</button>
-        )
-      ) : (
-        <button onClick={saveExercises}>Save</button>
-      )}
+          <button className="save-btn" onClick={saveExercises}>Save Workout</button>
+        )}
+      </div>
       {isWorkoutRunning && <div className="timer">{formatTime(remainingTime)}</div>}
       {showCongratulations && <CongratulationsPopup onClose={closeCongratulations} />}
     </div>
