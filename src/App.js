@@ -46,7 +46,6 @@ function App() {
             const nextIndex = currentExerciseIndex + 1;
             if (nextIndex < exercises.length) {
               setCurrentExerciseIndex(nextIndex);
-              speakExercise(exercises[nextIndex]);
               return exercises[nextIndex].duration;
             } else {
               stopWorkout();
@@ -59,6 +58,12 @@ function App() {
     }
     return () => clearInterval(interval);
   }, [isWorkoutRunning, currentExerciseIndex, exercises]);
+
+  useEffect(() => {
+    if (isWorkoutRunning && exercises[currentExerciseIndex]) {
+      speakExercise(exercises[currentExerciseIndex]);
+    }
+  }, [currentExerciseIndex, isWorkoutRunning]);
 
   const addExercise = () => {
     if (exerciseName && exerciseDuration) {
@@ -81,7 +86,6 @@ function App() {
     setIsWorkoutRunning(true);
     setCurrentExerciseIndex(0);
     setRemainingTime(exercises[0].duration);
-    speakExercise(exercises[0]);
   };
 
   const stopWorkout = () => {
