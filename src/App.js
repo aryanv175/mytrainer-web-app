@@ -39,7 +39,7 @@ function App() {
   const [remainingTime, setRemainingTime] = useState(0);
   const [showCongratulations, setShowCongratulations] = useState(false);
   const [showGifs, setShowGifs] = useState(false);
-  const [currentExerciseGif, setCurrentExerciseGif] = useState(null);
+  const [currentExerciseGif, setCurrentExerciseGif] = useState(null); // Track current exercise GIF
 
   const TENOR_API_KEY = process.env.REACT_APP_TENOR_API_KEY;
 
@@ -89,12 +89,12 @@ function App() {
 
   useEffect(() => {
     if (isWorkoutRunning && exercises[currentExerciseIndex]) {
-      customSpeakExercise(exercises[currentExerciseIndex]);
+      speakExercise(exercises[currentExerciseIndex]);
       if (showGifs) {
         loadExerciseGif(exercises[currentExerciseIndex].name);
       }
     } else {
-      setCurrentExerciseGif(null);
+      setCurrentExerciseGif(null); // Clear GIF when workout stops
     }
   }, [currentExerciseIndex, isWorkoutRunning, exercises, showGifs]);
 
@@ -124,17 +124,6 @@ function App() {
     setIsEditing(false);
   };
 
-  const customSpeakExercise = (exercise) => {
-    const text = `${exercise.name} for ${exercise.duration} seconds`;
-    
-    if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      speechSynthesis.speak(utterance);
-    } else {
-      console.log("Speech synthesis not supported. Exercise:", text);
-    }
-  };
-
   const startWorkout = async () => {
     if (exercises.length === 0) return;
     
@@ -151,23 +140,17 @@ function App() {
     setIsWorkoutRunning(true);
     setCurrentExerciseIndex(0);
     setRemainingTime(exercises[0].duration);
-    
-    // Attempt to play a silent audio to enable audio on mobile
-    const silentAudio = new Audio("data:audio/mp3;base64,SUQzBAAAAAAAI1TSS0UAAAAPAAADTGF2ZjU4LjIwLjEwMAAAAAAAAAAAAAAA//tUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAACAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV6urq6urq6urq6urq6urq6urq6urq6urq6v////////////////////////////////8AAAAATGF2YzU4LjM1AAAAAAAAAAAAAAAAJAYAAAAAAAAAASDs90hvAAAAAAAAAAAAAAAAAAAA//sUZAAP8AAAaQAAAAgAAA0gAAABAAABpAAAACAAADSAAAAETEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7UGQAAAAAAAGkAAAAIAAANIAAAAQAAAaQAAAAgAAA0gAAABFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV");
-    silentAudio.play().catch(error => console.log("Audio play failed:", error));
-    
-    // Speak the first exercise after a short delay
-    setTimeout(() => {
-      if (exercises[0]) {
-        customSpeakExercise(exercises[0]);
-      }
-    }, 1000);
   };
 
   const stopWorkout = () => {
     setIsWorkoutRunning(false);
     setCurrentExerciseIndex(0);
     setRemainingTime(0);
+  };
+
+  const speakExercise = (exercise) => {
+    const utterance = new SpeechSynthesisUtterance(`${exercise.name} for ${exercise.duration} seconds`);
+    speechSynthesis.speak(utterance);
   };
 
   const formatTime = (seconds) => {
