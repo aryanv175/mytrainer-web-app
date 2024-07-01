@@ -76,6 +76,7 @@ body {
   list-style-type: none;
   padding: 0;
   width: 100%;
+  padding-right: 6px; /* Add padding to the right side */
 }
 
 .exercise-item {
@@ -87,6 +88,16 @@ body {
   border-radius: 5px;
   margin-bottom: 10px;
   width: 100%;
+  box-sizing: border-box; /* Ensure padding and border are included in width calculation */
+}
+
+.exercise-item span {
+  flex: 1 1 80%; /* Allocate 80% width to the exercise text */
+}
+
+.delete-btn {
+  flex: 0 0 20%; /* Allocate 20% width to the delete button */
+  max-width: 100px; /* Optional: limit the maximum width of the delete button */
 }
 
 .exercise-item.active {
