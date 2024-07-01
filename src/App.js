@@ -185,7 +185,7 @@ function App() {
               max="600"
               className="duration-input"
             />
-            <span className="duration-label">seconds</span>
+            <span className="duration-label">s</span>
           </div>
           <button className="add-btn" onClick={addExercise}>Add Exercise</button>
           <div className="gif-toggle">
@@ -195,7 +195,8 @@ function App() {
                 checked={showGifs}
                 onChange={() => setShowGifs(!showGifs)}
               />
-              Show exercise GIFs
+              <span className="slider round"></span>
+              Show Exercise Gif <br/>
             </label>
           </div>
         </div>
