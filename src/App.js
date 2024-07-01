@@ -39,8 +39,29 @@ function App() {
   const [remainingTime, setRemainingTime] = useState(0);
   const [showCongratulations, setShowCongratulations] = useState(false);
   const [showGifs, setShowGifs] = useState(false);
+  const [currentExerciseGif, setCurrentExerciseGif] = useState(null); // Track current exercise GIF
 
   const TENOR_API_KEY = process.env.REACT_APP_TENOR_API_KEY;
+
+  const searchGif = async (exerciseName) => {
+    try {
+      const response = await axios.get('https://tenor.googleapis.com/v2/search?', {
+        params: {
+          q: `${exerciseName} exercise`,
+          key: TENOR_API_KEY,
+          limit: 1
+        }
+      });
+
+      if (response.data.results && response.data.results.length > 0) {
+        return response.data.results[0].media_formats.gif.url;
+      }
+      return null;
+    } catch (error) {
+      console.error('Error fetching GIF:', error);
+      return null;
+    }
+  };
 
   useEffect(() => {
     let interval;
@@ -69,8 +90,23 @@ function App() {
   useEffect(() => {
     if (isWorkoutRunning && exercises[currentExerciseIndex]) {
       speakExercise(exercises[currentExerciseIndex]);
+      if (showGifs) {
+        loadExerciseGif(exercises[currentExerciseIndex].name);
+      }
+    } else {
+      setCurrentExerciseGif(null); // Clear GIF when workout stops
     }
-  }, [currentExerciseIndex, isWorkoutRunning, exercises]);
+  }, [currentExerciseIndex, isWorkoutRunning, exercises, showGifs]);
+
+  const loadExerciseGif = async (exerciseName) => {
+    try {
+      const gifUrl = await searchGif(exerciseName);
+      setCurrentExerciseGif(gifUrl);
+    } catch (error) {
+      console.error('Error loading exercise GIF:', error);
+      setCurrentExerciseGif(null);
+    }
+  };
 
   const addExercise = () => {
     if (exerciseName && exerciseDuration) {
@@ -86,28 +122,6 @@ function App() {
 
   const saveExercises = () => {
     setIsEditing(false);
-  };
-
-  const searchGif = async (exerciseName) => {
-    try {
-      const response = await axios.get('https://tenor.googleapis.com/v2/search?', {
-        params: {
-          q: `${exerciseName} exercise`,
-          key: TENOR_API_KEY,
-          limit: 1
-        }
-      });
-
-      console.log(response)
-
-      if (response.data.results && response.data.results.length > 0) {
-        return response.data.results[0].media_formats.gif.url;
-      }
-      return null;
-    } catch (error) {
-      console.error('Error fetching GIF:', error);
-      return null;
-    }
   };
 
   const startWorkout = async () => {
@@ -127,7 +141,6 @@ function App() {
     setCurrentExerciseIndex(0);
     setRemainingTime(exercises[0].duration);
   };
-
 
   const stopWorkout = () => {
     setIsWorkoutRunning(false);
@@ -195,14 +208,16 @@ function App() {
             onDelete={() => deleteExercise(index)}
             isActive={isWorkoutRunning && index === currentExerciseIndex}
             showDeleteButton={!isWorkoutRunning}
-            showGif={showGifs && isWorkoutRunning}
           />
         ))}
       </ul>
       <div className="action-buttons">
         {!isEditing ? (
           isWorkoutRunning ? (
-            <button className="stop-btn" onClick={stopWorkout}>Stop Workout</button>
+            <React.Fragment>
+              <button className="stop-btn" onClick={stopWorkout}>Stop Workout</button> <br/>
+              {currentExerciseGif && <img src={currentExerciseGif} alt="Exercise GIF" className="exercise-gif" />}
+            </React.Fragment>
           ) : (
             <button className="start-btn" onClick={startWorkout}>Start Workout</button>
           )
