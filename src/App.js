@@ -3,11 +3,11 @@ import './App.css';
 import logoImage from './assets/logo.png';
 import Confetti from 'react-confetti';
 
-function Exercise({ exercise, onDelete, isActive }) {
+function Exercise({ exercise, onDelete, isActive, showDeleteButton }) {
   return (
     <li className={`exercise-item ${isActive ? 'active' : ''}`}>
       <span>{exercise.name} - {exercise.duration} seconds</span>
-      <button className="delete-btn" onClick={onDelete}>Delete</button>
+      {showDeleteButton && <button className="delete-btn" onClick={onDelete}>Delete</button>}
     </li>
   );
 }
@@ -122,14 +122,17 @@ function App() {
             placeholder="Enter Exercise Name"
             className="exercise-input"
           />
-          <input
-            type="number"
-            value={exerciseDuration}
-            onChange={(e) => setExerciseDuration(e.target.value)}
-            min="10"
-            max="600"
-            className="duration-input"
-          />
+          <div className="duration-input-container">
+            <input
+              type="number"
+              value={exerciseDuration}
+              onChange={(e) => setExerciseDuration(e.target.value)}
+              min="10"
+              max="600"
+              className="duration-input"
+            />
+            <span className="duration-label">seconds</span>
+          </div>
           <button className="add-btn" onClick={addExercise}>Add Exercise</button>
         </div>
       )}
@@ -140,6 +143,7 @@ function App() {
             exercise={exercise}
             onDelete={() => deleteExercise(index)}
             isActive={isWorkoutRunning && index === currentExerciseIndex}
+            showDeleteButton={!isWorkoutRunning}
           />
         ))}
       </ul>

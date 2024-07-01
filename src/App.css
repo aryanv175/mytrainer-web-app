@@ -120,3 +120,17 @@ body {
 .popup-content h2 {
   margin-top: 0;
 }
+
+.duration-input-container {
+  display: flex;
+  align-items: center;
+}
+
+.duration-input {
+  flex-grow: 1;
+  margin-right: 5px;
+}
+
+.duration-label {
+  white-space: nowrap;
+}
