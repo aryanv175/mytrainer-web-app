@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import logoImage from './assets/logo.png'
 
 function Exercise({ exercise, onDelete, isActive }) {
   return (
@@ -87,7 +88,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>💪 MyTrainer</h1>
+      <img src={logoImage} alt="Logo" />
       {isEditing && (
         <div>
           <input
