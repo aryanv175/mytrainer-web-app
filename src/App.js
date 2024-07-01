@@ -63,7 +63,7 @@ function App() {
     if (isWorkoutRunning && exercises[currentExerciseIndex]) {
       speakExercise(exercises[currentExerciseIndex]);
     }
-  }, [currentExerciseIndex, isWorkoutRunning]);
+  }, [currentExerciseIndex, isWorkoutRunning, exercises]);
 
   const addExercise = () => {
     if (exerciseName && exerciseDuration) {
