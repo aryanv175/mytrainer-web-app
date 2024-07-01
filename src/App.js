@@ -214,10 +214,7 @@ function App() {
       <div className="action-buttons">
         {!isEditing ? (
           isWorkoutRunning ? (
-            <React.Fragment>
-              <button className="stop-btn" onClick={stopWorkout}>Stop Workout</button> <br/>
-              {currentExerciseGif && <img src={currentExerciseGif} alt="Exercise GIF" className="exercise-gif" />}
-            </React.Fragment>
+            <button className="stop-btn" onClick={stopWorkout}>Stop Workout</button>
           ) : (
             <button className="start-btn" onClick={startWorkout}>Start Workout</button>
           )
@@ -225,7 +222,12 @@ function App() {
           <button className="save-btn" onClick={saveExercises}>Save Workout</button>
         )}
       </div>
-      {isWorkoutRunning && <div className="timer">{formatTime(remainingTime)}</div>}
+      {isWorkoutRunning && (
+        <React.Fragment>
+          <div className="timer">{formatTime(remainingTime)}</div>
+          {currentExerciseGif && <img src={currentExerciseGif} alt="Exercise GIF" className="exercise-gif" />}
+        </React.Fragment>
+      )}
       {showCongratulations && <CongratulationsPopup onClose={closeCongratulations} />}
     </div>
   );
