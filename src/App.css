@@ -39,13 +39,18 @@ body {
   border-radius: 5px;
 }
 
-.add-btn, .save-btn, .start-btn, .stop-btn, .delete-btn, .close-btn, .generate-btn {
+.generate2-btn, .cancel-btn, .add-btn, .save-btn, .start-btn, .stop-btn, .delete-btn, .close-btn, .generate-btn {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
   color: white;
   cursor: pointer;
   transition: background-color 0.3s;
+}
+
+.generate2-btn{
+  background-color: #4CAF50;
+  margin: 8px;
 }
 
 .add-btn {
@@ -60,7 +65,7 @@ body {
   background-color: #4CAF50;
 }
 
-.stop-btn, .delete-btn {
+.stop-btn, .delete-btn, .cancel-btn {
   background-color: #f44336;
 }
 
@@ -68,6 +73,9 @@ body {
   background-color: #2196F3;
 }
 
+.cancel-btn{
+  margin: 8px;
+}
 .generate-btn {
   margin-bottom: 12px;
 }

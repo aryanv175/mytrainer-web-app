@@ -78,6 +78,7 @@ function WorkoutGenerator({ onGenerate, onCancel }) {
       <div>
         <label htmlFor="intensity">Workout Intensity:</label>
         <select
+          className='dropdown'
           id="intensity"
           value={intensity}
           onChange={(e) => setIntensity(e.target.value)}
@@ -89,8 +90,8 @@ function WorkoutGenerator({ onGenerate, onCancel }) {
         </select>
       </div>
       <div className="action-buttons">
-        <button type="submit">Generate Workout</button>
-        <button type="button" onClick={onCancel}>Cancel</button>
+        <button className="generate2-btn" type="submit">Generate Workout</button>
+        <button className="cancel-btn" type="button" onClick={onCancel}>Cancel</button>
       </div>
     </form>
   );
