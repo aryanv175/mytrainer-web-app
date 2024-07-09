@@ -283,7 +283,7 @@ function App() {
       <img src={logoImage} alt="Logo" className="logo" />
       {isEditing && !showWorkoutGenerator && (
         <div className="action-buttons">
-          <button onClick={() => setShowWorkoutGenerator(true)}>Generate Custom Workout</button>
+          <button className="generate-btn" onClick={() => setShowWorkoutGenerator(true)}>Generate Custom Workout</button>
         </div>
       )}
       {showWorkoutGenerator && (

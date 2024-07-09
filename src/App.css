@@ -39,7 +39,7 @@ body {
   border-radius: 5px;
 }
 
-.add-btn, .save-btn, .start-btn, .stop-btn, .delete-btn, .close-btn {
+.add-btn, .save-btn, .start-btn, .stop-btn, .delete-btn, .close-btn, .generate-btn {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -52,7 +52,7 @@ body {
   background-color: #4CAF50;
 }
 
-.save-btn {
+.generate-btn, .save-btn {
   background-color: #2196F3;
 }
 
@@ -66,6 +66,10 @@ body {
 
 .close-btn {
   background-color: #2196F3;
+}
+
+.generate-btn {
+  margin-bottom: 12px;
 }
 
 .add-btn:hover, .save-btn:hover, .start-btn:hover, .stop-btn:hover, .delete-btn:hover, .close-btn:hover {
