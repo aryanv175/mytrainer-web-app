@@ -31,7 +31,7 @@ function CongratulationsPopup({ onClose }) {
 
 function WorkoutGenerator({ onGenerate, onCancel }) {
   const [muscle, setMuscle] = useState('');
-  const [duration, setDuration] = useState(30);
+  const [duration, setDuration] = useState(10);
   const [intensity, setIntensity] = useState('medium');
 
   const handleSubmit = (e) => {
@@ -61,15 +61,19 @@ function WorkoutGenerator({ onGenerate, onCancel }) {
       </div>
       <div>
         <label htmlFor="duration">Workout Duration (minutes):</label>
-        <input
-          type="number"
+        <select
           id="duration"
           value={duration}
           onChange={(e) => setDuration(parseInt(e.target.value))}
-          min="10"
-          max="120"
           required
-        />
+        >
+          <option value="10">10 minutes</option>
+          <option value="20">20 minutes</option>
+          <option value="30">30 minutes</option>
+          <option value="40">40 minutes</option>
+          <option value="50">50 minutes</option>
+          <option value="60">60 minutes</option>
+        </select>
       </div>
       <div>
         <label htmlFor="intensity">Workout Intensity:</label>
@@ -190,28 +194,43 @@ function App() {
 
   const generateCustomWorkout = (muscle, duration, intensity) => {
     const exerciseDatabase = {
-      chest: ['Push-ups', 'Chest Press', 'Chest Flyes', 'Incline Push-ups'],
-      back: ['Pull-ups', 'Rows', 'Lat Pulldowns', 'Superman'],
+      chest: ['Pushups', 'Chest Press', 'Chest Flyes', 'Incline Pushups'],
+      back: ['Pullups', 'Rows', 'Lat Pulldowns', 'Superman'],
       legs: ['Squats', 'Lunges', 'Leg Press', 'Calf Raises'],
       arms: ['Bicep Curls', 'Tricep Extensions', 'Hammer Curls', 'Dips'],
       core: ['Planks', 'Crunches', 'Russian Twists', 'Leg Raises'],
       fullBody: ['Burpees', 'Mountain Climbers', 'Jumping Jacks', 'High Knees']
     };
 
-    const intensityFactors = {
-      low: 0.8,
-      medium: 1,
-      high: 1.2
+    const restTimes = {
+      low: 25,
+      medium: 15,
+      high: 5
     };
 
     const exercises = exerciseDatabase[muscle];
-    const totalExercises = Math.floor(duration / 5);
+    const totalDurationInSeconds = duration * 60;
+    const restTime = restTimes[intensity];
     const generatedWorkout = [];
 
-    for (let i = 0; i < totalExercises; i++) {
-      const exercise = exercises[i % exercises.length];
-      const exerciseDuration = Math.round(60 * intensityFactors[intensity]);
-      generatedWorkout.push({ name: exercise, duration: exerciseDuration });
+    let remainingTime = totalDurationInSeconds;
+    let exerciseIndex = 0;
+
+    while (remainingTime > 0) {
+      const exercise = exercises[exerciseIndex % exercises.length];
+      const exerciseDuration = Math.min(60, remainingTime - restTime);
+
+      if (exerciseDuration > 0) {
+        generatedWorkout.push({ name: exercise, duration: exerciseDuration });
+        remainingTime -= exerciseDuration;
+
+        if (remainingTime >= restTime) {
+          generatedWorkout.push({ name: 'Rest', duration: restTime });
+          remainingTime -= restTime;
+        }
+      }
+
+      exerciseIndex++;
     }
 
     setExercises(generatedWorkout);
@@ -226,7 +245,7 @@ function App() {
       const exercisesWithGifs = await Promise.all(
         exercises.map(async (exercise) => ({
           ...exercise,
-          gifUrl: await searchGif(exercise.name)
+          gifUrl: exercise.name !== 'Rest' ? await searchGif(exercise.name) : null
         }))
       );
       setExercises(exercisesWithGifs);
@@ -315,6 +334,7 @@ function App() {
             onDelete={() => deleteExercise(index)}
             isActive={isWorkoutRunning && index === currentExerciseIndex}
             showDeleteButton={!isWorkoutRunning}
+            showGif={showGifs && exercise.name !== 'Rest'}
           />
         ))}
       </ul>
