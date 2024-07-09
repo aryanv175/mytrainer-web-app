@@ -349,7 +349,7 @@ function App() {
             <button className="start-btn" onClick={startWorkout}>Start Workout</button>
           )
         ) : (
-          <button className="save-btn" onClick={saveExercises}>Save Workout</button>
+          !showWorkoutGenerator && <button className="save-btn" onClick={saveExercises}>Save Workout</button>
         )}
       </div>
       {isWorkoutRunning && (
