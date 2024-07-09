@@ -29,6 +29,69 @@ function CongratulationsPopup({ onClose }) {
   );
 }
 
+function WorkoutGenerator({ onGenerate, onCancel }) {
+  const [muscle, setMuscle] = useState('');
+  const [duration, setDuration] = useState(30);
+  const [intensity, setIntensity] = useState('medium');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onGenerate(muscle, duration, intensity);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="workout-generator">
+      <h2>Generate Custom Workout</h2>
+      <div>
+        <label htmlFor="muscle">Muscle/Body Part:</label>
+        <select
+          id="muscle"
+          value={muscle}
+          onChange={(e) => setMuscle(e.target.value)}
+          required
+        >
+          <option value="">Select muscle</option>
+          <option value="chest">Chest</option>
+          <option value="back">Back</option>
+          <option value="legs">Legs</option>
+          <option value="arms">Arms</option>
+          <option value="core">Core</option>
+          <option value="fullBody">Full Body</option>
+        </select>
+      </div>
+      <div>
+        <label htmlFor="duration">Workout Duration (minutes):</label>
+        <input
+          type="number"
+          id="duration"
+          value={duration}
+          onChange={(e) => setDuration(parseInt(e.target.value))}
+          min="10"
+          max="120"
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="intensity">Workout Intensity:</label>
+        <select
+          id="intensity"
+          value={intensity}
+          onChange={(e) => setIntensity(e.target.value)}
+          required
+        >
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+      </div>
+      <div className="action-buttons">
+        <button type="submit">Generate Workout</button>
+        <button type="button" onClick={onCancel}>Cancel</button>
+      </div>
+    </form>
+  );
+}
+
 function App() {
   const [exercises, setExercises] = useState([]);
   const [exerciseName, setExerciseName] = useState('');
@@ -39,7 +102,8 @@ function App() {
   const [remainingTime, setRemainingTime] = useState(0);
   const [showCongratulations, setShowCongratulations] = useState(false);
   const [showGifs, setShowGifs] = useState(false);
-  const [currentExerciseGif, setCurrentExerciseGif] = useState(null); // Track current exercise GIF
+  const [currentExerciseGif, setCurrentExerciseGif] = useState(null);
+  const [showWorkoutGenerator, setShowWorkoutGenerator] = useState(false);
 
   const TENOR_API_KEY = process.env.REACT_APP_TENOR_API_KEY;
 
@@ -94,7 +158,7 @@ function App() {
         loadExerciseGif(exercises[currentExerciseIndex].name);
       }
     } else {
-      setCurrentExerciseGif(null); // Clear GIF when workout stops
+      setCurrentExerciseGif(null);
     }
   }, [currentExerciseIndex, isWorkoutRunning, exercises, showGifs]);
 
@@ -121,6 +185,37 @@ function App() {
   };
 
   const saveExercises = () => {
+    setIsEditing(false);
+  };
+
+  const generateCustomWorkout = (muscle, duration, intensity) => {
+    const exerciseDatabase = {
+      chest: ['Push-ups', 'Chest Press', 'Chest Flyes', 'Incline Push-ups'],
+      back: ['Pull-ups', 'Rows', 'Lat Pulldowns', 'Superman'],
+      legs: ['Squats', 'Lunges', 'Leg Press', 'Calf Raises'],
+      arms: ['Bicep Curls', 'Tricep Extensions', 'Hammer Curls', 'Dips'],
+      core: ['Planks', 'Crunches', 'Russian Twists', 'Leg Raises'],
+      fullBody: ['Burpees', 'Mountain Climbers', 'Jumping Jacks', 'High Knees']
+    };
+
+    const intensityFactors = {
+      low: 0.8,
+      medium: 1,
+      high: 1.2
+    };
+
+    const exercises = exerciseDatabase[muscle];
+    const totalExercises = Math.floor(duration / 5);
+    const generatedWorkout = [];
+
+    for (let i = 0; i < totalExercises; i++) {
+      const exercise = exercises[i % exercises.length];
+      const exerciseDuration = Math.round(60 * intensityFactors[intensity]);
+      generatedWorkout.push({ name: exercise, duration: exerciseDuration });
+    }
+
+    setExercises(generatedWorkout);
+    setShowWorkoutGenerator(false);
     setIsEditing(false);
   };
 
@@ -167,7 +262,18 @@ function App() {
   return (
     <div className="App">
       <img src={logoImage} alt="Logo" className="logo" />
-      {isEditing && (
+      {isEditing && !showWorkoutGenerator && (
+        <div className="action-buttons">
+          <button onClick={() => setShowWorkoutGenerator(true)}>Generate Custom Workout</button>
+        </div>
+      )}
+      {showWorkoutGenerator && (
+        <WorkoutGenerator
+          onGenerate={generateCustomWorkout}
+          onCancel={() => setShowWorkoutGenerator(false)}
+        />
+      )}
+      {isEditing && !showWorkoutGenerator && (
         <div className="input-container">
           <input
             type="text"
