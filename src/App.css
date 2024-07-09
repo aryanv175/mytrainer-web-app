@@ -73,6 +73,12 @@ body {
   background-color: #2196F3;
 }
 
+.dropdown{
+  margin: 8px;
+  padding: 6px;
+  border-radius: 12px;
+}
+
 .cancel-btn{
   margin: 8px;
 }

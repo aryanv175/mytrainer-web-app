@@ -45,6 +45,7 @@ function WorkoutGenerator({ onGenerate, onCancel }) {
       <div>
         <label htmlFor="muscle">Muscle/Body Part:</label>
         <select
+          className='dropdown'
           id="muscle"
           value={muscle}
           onChange={(e) => setMuscle(e.target.value)}
@@ -62,6 +63,7 @@ function WorkoutGenerator({ onGenerate, onCancel }) {
       <div>
         <label htmlFor="duration">Workout Duration (minutes):</label>
         <select
+          className='dropdown'
           id="duration"
           value={duration}
           onChange={(e) => setDuration(parseInt(e.target.value))}
