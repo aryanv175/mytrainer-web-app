@@ -337,7 +337,6 @@ function App() {
             onDelete={() => deleteExercise(index)}
             isActive={isWorkoutRunning && index === currentExerciseIndex}
             showDeleteButton={!isWorkoutRunning}
-            showGif={showGifs && exercise.name !== 'Rest'}
           />
         ))}
       </ul>
